@@ -1,0 +1,665 @@
+package com.auracoder.app
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+
+private val Background = Color(0xFF080A10)
+private val Card = Color(0xFF11151F)
+private val Card2 = Color(0xFF181D29)
+private val White = Color(0xFFF5F7FF)
+private val Gray = Color(0xFF8D96AA)
+private val Purple = Color(0xFF8B5CF6)
+private val Green = Color(0xFF22C55E)
+
+class MainActivity : ComponentActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContent {
+            AuraCoder()
+        }
+    }
+}
+
+@Composable
+fun AuraCoder() {
+
+    var language by remember {
+        mutableStateOf("Python")
+    }
+
+    var prompt by remember {
+        mutableStateOf("")
+    }
+
+    var code by remember {
+        mutableStateOf(
+            """
+# Welcome to Aura Coder
+
+def hello():
+    print("Hello from Aura Coder!")
+
+hello()
+""".trimIndent()
+        )
+    }
+
+    var output by remember {
+        mutableStateOf("Aura Coder is ready.")
+    }
+
+    var showLanguages by remember {
+        mutableStateOf(false)
+    }
+
+    MaterialTheme(
+        colorScheme = darkColorScheme(
+            background = Background,
+            surface = Card,
+            primary = Purple
+        )
+    ) {
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Background)
+                .statusBarsPadding()
+        ) {
+
+            TopBar()
+
+            FileTabs(language)
+
+            LanguageSelector(
+                language = language,
+                expanded = showLanguages,
+                onClick = {
+                    showLanguages = !showLanguages
+                },
+                onSelect = {
+                    language = it
+                    showLanguages = false
+                }
+            )
+
+            Editor(
+                code = code,
+                onCodeChange = {
+                    code = it
+                }
+            )
+
+            AuraAI(
+                prompt = prompt,
+                onPromptChange = {
+                    prompt = it
+                },
+                onGenerate = {
+
+                    if (prompt.isNotBlank()) {
+
+                        code = generateCode(
+                            language,
+                            prompt
+                        )
+
+                        output =
+                            "✨ Aura generated $language code."
+
+                        prompt = ""
+                    }
+                }
+            )
+
+            BottomActions(
+                onRun = {
+                    output =
+                        "▶ Running $language code..."
+                },
+                onExport = {
+                    output =
+                        "Code exported successfully."
+                }
+            )
+
+            Text(
+                text = output,
+                color = Gray,
+                fontSize = 11.sp,
+                modifier = Modifier.padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    bottom = 12.dp
+                )
+            )
+        }
+    }
+}
+
+@Composable
+fun TopBar() {
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Box(
+            modifier = Modifier
+                .size(44.dp)
+                .background(
+                    Purple,
+                    RoundedCornerShape(14.dp)
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+
+            Text(
+                text = "A",
+                color = Color.White,
+                fontSize = 23.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        Spacer(
+            modifier = Modifier.width(12.dp)
+        )
+
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+
+            Text(
+                text = "Aura Coder",
+                color = White,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Text(
+                text = "AI Coding Studio",
+                color = Gray,
+                fontSize = 11.sp
+            )
+        }
+
+        IconButton(onClick = {}) {
+
+            Icon(
+                Icons.Default.Search,
+                contentDescription = "Search",
+                tint = White
+            )
+        }
+
+        IconButton(onClick = {}) {
+
+            Icon(
+                Icons.Default.Settings,
+                contentDescription = "Settings",
+                tint = White
+            )
+        }
+    }
+}
+
+@Composable
+fun FileTabs(language: String) {
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Card)
+            .horizontalScroll(
+                rememberScrollState()
+            )
+            .padding(horizontal = 8.dp)
+    ) {
+
+        Text(
+            text = "main.${extension(language)}",
+            color = White,
+            fontSize = 12.sp,
+            modifier = Modifier.padding(
+                horizontal = 14.dp,
+                vertical = 12.dp
+            )
+        )
+
+        Text(
+            text = "+",
+            color = Gray,
+            fontSize = 18.sp,
+            modifier = Modifier.padding(
+                horizontal = 14.dp,
+                vertical = 8.dp
+            )
+        )
+    }
+}
+
+@Composable
+fun LanguageSelector(
+    language: String,
+    expanded: Boolean,
+    onClick: () -> Unit,
+    onSelect: (String) -> Unit
+) {
+
+    Column(
+        modifier = Modifier.padding(12.dp)
+    ) {
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    Card2,
+                    RoundedCornerShape(14.dp)
+                )
+                .clickable {
+                    onClick()
+                }
+                .padding(15.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            Text(
+                text = "LANGUAGE",
+                color = Gray,
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(
+                modifier = Modifier.width(14.dp)
+            )
+
+            Text(
+                text = language,
+                color = White,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.weight(1f)
+            )
+
+            Icon(
+                Icons.Default.ExpandMore,
+                contentDescription = null,
+                tint = Gray
+            )
+        }
+
+        if (expanded) {
+
+            LanguageMenu(
+                onSelect = onSelect
+            )
+        }
+    }
+}
+
+@Composable
+fun LanguageMenu(
+    onSelect: (String) -> Unit
+) {
+
+    val languages = listOf(
+        "Python",
+        "JavaScript",
+        "TypeScript",
+        "Java",
+        "Kotlin",
+        "C",
+        "C++",
+        "C#",
+        "Go",
+        "Rust",
+        "PHP",
+        "Swift",
+        "Dart",
+        "HTML",
+        "CSS",
+        "SQL",
+        "Ruby"
+    )
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                Color(0xFF1B2030),
+                RoundedCornerShape(14.dp)
+            )
+            .padding(8.dp)
+    ) {
+
+        languages.chunked(2).forEach { row ->
+
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+
+                row.forEach { language ->
+
+                    Text(
+                        text = language,
+                        color = White,
+                        fontSize = 12.sp,
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable {
+                                onSelect(language)
+                            }
+                            .padding(10.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun Editor(
+    code: String,
+    onCodeChange: (String) -> Unit
+) {
+
+    Column(
+        modifier = Modifier
+            .weight(1f)
+            .padding(horizontal = 12.dp)
+    ) {
+
+        Text(
+            text = "CODE EDITOR",
+            color = Gray,
+            fontSize = 10.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(
+                start = 4.dp,
+                bottom = 6.dp
+            )
+        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    Color(0xFF0D1017),
+                    RoundedCornerShape(16.dp)
+                )
+        ) {
+
+            BasicTextField(
+                value = code,
+                onValueChange = onCodeChange,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                textStyle = TextStyle(
+                    color = Color(0xFFD8DEE9),
+                    fontSize = 14.sp,
+                    lineHeight = 21.sp,
+                    fontFamily = FontFamily.Monospace
+                )
+            )
+        }
+    }
+}
+
+@Composable
+fun AuraAI(
+    prompt: String,
+    onPromptChange: (String) -> Unit,
+    onGenerate: () -> Unit
+) {
+
+    Column(
+        modifier = Modifier.padding(
+            top = 10.dp,
+            start = 12.dp,
+            end = 12.dp
+        )
+    ) {
+
+        Text(
+            text = "AURA AI",
+            color = Gray,
+            fontSize = 10.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(
+                start = 4.dp,
+                bottom = 6.dp
+            )
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    Card,
+                    RoundedCornerShape(14.dp)
+                )
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            BasicTextField(
+                value = prompt,
+                onValueChange = onPromptChange,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(8.dp),
+                textStyle = TextStyle(
+                    color = White,
+                    fontSize = 13.sp
+                ),
+                decorationBox = { innerTextField ->
+
+                    if (prompt.isEmpty()) {
+
+                        Text(
+                            "Ask Aura to write code...",
+                            color = Gray,
+                            fontSize = 13.sp
+                        )
+                    }
+
+                    innerTextField()
+                }
+            )
+
+            IconButton(
+                onClick = onGenerate
+            ) {
+
+                Icon(
+                    Icons.Default.AutoAwesome,
+                    contentDescription = "Generate",
+                    tint = Purple
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun BottomActions(
+    onRun: () -> Unit,
+    onExport: () -> Unit
+) {
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+
+        Button(
+            onClick = onRun,
+            modifier = Modifier.weight(1f),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Green
+            ),
+            shape = RoundedCornerShape(12.dp)
+        ) {
+
+            Icon(
+                Icons.Default.PlayArrow,
+                contentDescription = null
+            )
+
+            Spacer(
+                modifier = Modifier.width(5.dp)
+            )
+
+            Text(
+                "RUN",
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        OutlinedButton(
+            onClick = onExport,
+            modifier = Modifier.weight(1f),
+            shape = RoundedCornerShape(12.dp)
+        ) {
+
+            Icon(
+                Icons.Default.Download,
+                contentDescription = null
+            )
+
+            Spacer(
+                modifier = Modifier.width(5.dp)
+            )
+
+            Text("EXPORT")
+        }
+    }
+}
+
+fun extension(language: String): String {
+
+    return when (language) {
+
+        "Python" -> "py"
+        "JavaScript" -> "js"
+        "TypeScript" -> "ts"
+        "Java" -> "java"
+        "Kotlin" -> "kt"
+        "C" -> "c"
+        "C++" -> "cpp"
+        "C#" -> "cs"
+        "Go" -> "go"
+        "Rust" -> "rs"
+        "PHP" -> "php"
+        "Swift" -> "swift"
+        "Dart" -> "dart"
+        "HTML" -> "html"
+        "CSS" -> "css"
+        "SQL" -> "sql"
+        "Ruby" -> "rb"
+
+        else -> "txt"
+    }
+}
+
+fun generateCode(
+    language: String,
+    prompt: String
+): String {
+
+    return when (language) {
+
+        "Python" -> """
+# Generated by Aura Coder
+
+# Request:
+# $prompt
+
+def main():
+
+    print("Aura Coder generated this solution.")
+
+if __name__ == "__main__":
+    main()
+""".trimIndent()
+
+        "JavaScript" -> """
+// Generated by Aura Coder
+
+// Request:
+// $prompt
+
+function main() {
+
+    console.log(
+        "Aura Coder generated this solution."
+    );
+}
+
+main();
+""".trimIndent()
+
+        "HTML" -> """
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>Aura Coder</title>
+
+</head>
+
+<body>
+
+    <h1>$prompt</h1>
+
+</body>
+
+</html>
+""".trimIndent()
+
+        else -> """
+// Aura Coder
+// Language: $language
+
+// Request:
+// $prompt
+
+// AI generated code will appear here.
+""".trimIndent()
+    }
+}
+
+Important: this gives you the app UI and local demo generator. For Aura Coder to actually generate advanced code using an AI model, the "generateCode()" function should be connected to an AI API through a secure backend rather than putting an API key inside the APK.
