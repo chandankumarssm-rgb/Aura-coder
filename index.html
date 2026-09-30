@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aura Code | High-Level AI Software Architect</title>
+  <title>Aura Code | Next-Gen AI Software Engine</title>
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,15 +19,15 @@
 
   <style>
     :root {
-      --bg: #07090e;
-      --card-bg: rgba(16, 20, 31, 0.7);
-      --card-border: rgba(147, 197, 253, 0.12);
+      --bg: #05070c;
+      --card-bg: rgba(14, 18, 30, 0.72);
+      --card-border: rgba(56, 189, 248, 0.16);
       --aura-cyan: #00f2fe;
-      --aura-purple: #7928ca;
-      --aura-pink: #ff0080;
-      --text-main: #f1f5f9;
+      --aura-purple: #8b5cf6;
+      --aura-pink: #ec4899;
+      --text-main: #f8fafc;
       --text-muted: #94a3b8;
-      --code-bg: #0d1117;
+      --code-bg: #090d16;
       --font-ui: 'Plus Jakarta Sans', sans-serif;
       --font-code: 'Fira Code', monospace;
     }
@@ -47,42 +47,42 @@
       position: relative;
     }
 
-    /* Ambient Background Aura Lights */
+    /* Ambient Dynamic Glowing Backgrounds */
     .aura-glow-1 {
       position: fixed;
-      top: -150px;
-      left: 10%;
-      width: 550px;
-      height: 550px;
-      background: radial-gradient(circle, rgba(121, 40, 202, 0.28) 0%, transparent 70%);
-      filter: blur(90px);
+      top: -200px;
+      left: 15%;
+      width: 650px;
+      height: 650px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.25) 0%, transparent 70%);
+      filter: blur(120px);
       z-index: 0;
       pointer-events: none;
-      animation: pulseAura 8s infinite alternate ease-in-out;
+      animation: pulseAura 9s infinite alternate ease-in-out;
     }
 
     .aura-glow-2 {
       position: fixed;
-      bottom: -150px;
-      right: 5%;
-      width: 650px;
-      height: 650px;
-      background: radial-gradient(circle, rgba(0, 242, 254, 0.2) 0%, transparent 70%);
-      filter: blur(100px);
+      bottom: -200px;
+      right: 10%;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(0, 242, 254, 0.22) 0%, transparent 70%);
+      filter: blur(130px);
       z-index: 0;
       pointer-events: none;
-      animation: pulseAura 10s infinite alternate-reverse ease-in-out;
+      animation: pulseAura 12s infinite alternate-reverse ease-in-out;
     }
 
     @keyframes pulseAura {
       0% { transform: scale(1) translate(0, 0); opacity: 0.6; }
-      100% { transform: scale(1.15) translate(30px, -20px); opacity: 0.9; }
+      100% { transform: scale(1.2) translate(40px, -30px); opacity: 0.95; }
     }
 
     .app-container {
       position: relative;
       z-index: 1;
-      max-width: 1400px;
+      max-width: 1440px;
       margin: 0 auto;
       padding: 1.5rem 2rem 4rem;
       display: flex;
@@ -90,44 +90,44 @@
       gap: 1.5rem;
     }
 
-    /* Header */
+    /* Top Navigation Header */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 1.5rem;
+      padding: 1.1rem 1.6rem;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 18px;
-      backdrop-filter: blur(20px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+      border-radius: 20px;
+      backdrop-filter: blur(24px);
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.85rem;
+      gap: 1rem;
     }
 
     .brand-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
       background: linear-gradient(135deg, var(--aura-purple), var(--aura-cyan));
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       color: #fff;
-      box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+      box-shadow: 0 0 25px rgba(0, 242, 254, 0.5);
     }
 
     .brand-text h1 {
-      font-size: 1.35rem;
+      font-size: 1.4rem;
       font-weight: 800;
       letter-spacing: -0.5px;
-      background: linear-gradient(90deg, #ffffff, #93c5fd);
+      background: linear-gradient(90deg, #ffffff, #67e8f9);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -137,6 +137,7 @@
       color: var(--text-muted);
       letter-spacing: 0.8px;
       text-transform: uppercase;
+      font-weight: 600;
     }
 
     .header-actions {
@@ -145,18 +146,16 @@
       gap: 1rem;
     }
 
-    .model-badge {
+    /* Model Selector Dropdown */
+    .model-selector-wrapper {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      font-size: 0.8rem;
-      padding: 0.45rem 0.9rem;
-      border-radius: 9999px;
-      background: rgba(0, 242, 254, 0.08);
-      border: 1px solid rgba(0, 242, 254, 0.3);
-      color: var(--aura-cyan);
-      font-family: var(--font-code);
-      font-weight: 500;
+      background: rgba(10, 15, 26, 0.8);
+      border: 1px solid rgba(0, 242, 254, 0.35);
+      border-radius: 12px;
+      padding: 0.4rem 0.8rem;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
     }
 
     .status-dot {
@@ -164,14 +163,31 @@
       height: 8px;
       background: #10b981;
       border-radius: 50%;
-      box-shadow: 0 0 8px #10b981;
+      box-shadow: 0 0 10px #10b981;
+      flex-shrink: 0;
+    }
+
+    .model-select {
+      background: transparent;
+      border: none;
+      color: var(--aura-cyan);
+      font-family: var(--font-code);
+      font-size: 0.85rem;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .model-select option {
+      background: #0f172a;
+      color: #f8fafc;
     }
 
     .api-key-btn {
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 0.5rem 1.1rem;
+      padding: 0.55rem 1.15rem;
       border-radius: 12px;
       font-weight: 600;
       font-size: 0.85rem;
@@ -179,42 +195,43 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      transition: all 0.2s ease;
+      transition: all 0.25s ease;
     }
 
     .api-key-btn:hover {
       background: rgba(255, 255, 255, 0.12);
-      border-color: rgba(255, 255, 255, 0.3);
+      border-color: rgba(0, 242, 254, 0.4);
     }
 
-    /* Main Grid Layout */
+    /* Workspace Layout */
     .workspace {
       display: grid;
-      grid-template-columns: 380px 1fr;
+      grid-template-columns: 400px 1fr;
       gap: 1.5rem;
       align-items: start;
     }
 
-    @media (max-width: 1024px) {
+    @media (max-width: 1080px) {
       .workspace {
         grid-template-columns: 1fr;
       }
     }
 
-    /* Left Control Panel */
+    /* Control Panel (Left) */
     .control-panel {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 20px;
-      padding: 1.5rem;
+      padding: 1.6rem;
       backdrop-filter: blur(20px);
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 1.3rem;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
     }
 
     .panel-section-title {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
@@ -224,14 +241,14 @@
     .stack-select-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 0.5rem;
+      gap: 0.6rem;
     }
 
     .stack-option {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--card-border);
       border-radius: 10px;
-      padding: 0.65rem 0.75rem;
+      padding: 0.7rem 0.6rem;
       font-size: 0.8rem;
       font-weight: 600;
       color: var(--text-main);
@@ -241,38 +258,51 @@
     }
 
     .stack-option:hover, .stack-option.active {
-      background: linear-gradient(135deg, rgba(121, 40, 202, 0.25), rgba(0, 242, 254, 0.25));
-      border-color: var(--aura-cyan);
-      box-shadow: 0 0 14px rgba(0, 242, 254, 0.2);
-    }
-
-    .prompt-box {
-      width: 100%;
-      min-height: 180px;
-      background: rgba(10, 13, 20, 0.7);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 1rem;
-      color: #fff;
-      font-family: var(--font-ui);
-      font-size: 0.95rem;
-      line-height: 1.5;
-      resize: vertical;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .prompt-box:focus {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(0, 242, 254, 0.25));
       border-color: var(--aura-cyan);
       box-shadow: 0 0 16px rgba(0, 242, 254, 0.25);
     }
 
+    .prompt-box {
+      width: 100%;
+      min-height: 200px;
+      background: rgba(8, 11, 18, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.1rem;
+      color: #fff;
+      font-family: var(--font-ui);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      resize: vertical;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    .prompt-box:focus {
+      border-color: var(--aura-cyan);
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
+    }
+
+    .custom-model-box {
+      width: 100%;
+      background: rgba(8, 11, 18, 0.7);
+      border: 1px solid var(--card-border);
+      padding: 0.5rem 0.8rem;
+      border-radius: 10px;
+      color: var(--aura-cyan);
+      font-family: var(--font-code);
+      font-size: 0.8rem;
+      display: none;
+      outline: none;
+    }
+
     .generate-btn {
       width: 100%;
-      background: linear-gradient(135deg, #7928ca 0%, #00f2fe 100%);
+      background: linear-gradient(135deg, #8b5cf6 0%, #00f2fe 100%);
       color: #fff;
       border: none;
-      padding: 0.9rem;
+      padding: 1rem;
       border-radius: 14px;
       font-size: 1rem;
       font-weight: 700;
@@ -282,17 +312,17 @@
       align-items: center;
       justify-content: center;
       gap: 0.6rem;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 20px rgba(0, 242, 254, 0.35);
+      transition: all 0.25s ease;
+      box-shadow: 0 6px 25px rgba(0, 242, 254, 0.35);
     }
 
     .generate-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 26px rgba(0, 242, 254, 0.5);
+      box-shadow: 0 8px 30px rgba(0, 242, 254, 0.55);
     }
 
     .generate-btn:disabled {
-      opacity: 0.6;
+      opacity: 0.5;
       cursor: not-allowed;
       transform: none;
     }
@@ -300,14 +330,14 @@
     .preset-pills {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.4rem;
+      gap: 0.45rem;
     }
 
     .pill {
-      font-size: 0.75rem;
-      background: rgba(255, 255, 255, 0.05);
+      font-size: 0.74rem;
+      background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--card-border);
-      padding: 0.35rem 0.65rem;
+      padding: 0.4rem 0.7rem;
       border-radius: 20px;
       color: var(--text-muted);
       cursor: pointer;
@@ -319,30 +349,30 @@
       border-color: var(--aura-cyan);
     }
 
-    /* Right Display Viewport */
+    /* Output Terminal & Code Viewport */
     .output-viewport {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 20px;
-      min-height: 600px;
+      min-height: 650px;
       backdrop-filter: blur(20px);
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45);
     }
 
     .viewport-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.9rem 1.4rem;
+      padding: 1rem 1.5rem;
       border-bottom: 1px solid var(--card-border);
-      background: rgba(10, 13, 20, 0.5);
+      background: rgba(8, 12, 20, 0.65);
     }
 
     .viewport-title {
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       font-weight: 600;
       color: var(--text-muted);
       display: flex;
@@ -356,10 +386,10 @@
     }
 
     .tool-btn {
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 0.4rem 0.8rem;
+      padding: 0.45rem 0.85rem;
       border-radius: 8px;
       font-size: 0.8rem;
       font-weight: 500;
@@ -374,31 +404,30 @@
     }
 
     .viewport-content {
-      padding: 1.5rem;
+      padding: 1.8rem;
       overflow-y: auto;
       flex-grow: 1;
-      line-height: 1.6;
+      line-height: 1.65;
     }
 
-    /* Markdown & Code Style */
     .viewport-content h1, .viewport-content h2, .viewport-content h3 {
       color: #fff;
-      margin: 1.2rem 0 0.6rem;
+      margin: 1.4rem 0 0.8rem;
       letter-spacing: -0.3px;
     }
 
     .viewport-content p {
-      margin-bottom: 0.9rem;
+      margin-bottom: 1rem;
       color: #cbd5e1;
     }
 
     .viewport-content pre {
       position: relative;
       background: var(--code-bg);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.09);
       border-radius: 12px;
-      padding: 1rem;
-      margin: 1.2rem 0;
+      padding: 1.1rem;
+      margin: 1.3rem 0;
       overflow-x: auto;
       font-family: var(--font-code);
       font-size: 0.88rem;
@@ -411,42 +440,42 @@
     .viewport-content p code {
       background: rgba(255, 255, 255, 0.1);
       padding: 0.2rem 0.4rem;
-      border-radius: 5px;
+      border-radius: 6px;
       color: var(--aura-cyan);
-      font-size: 0.85em;
     }
 
-    /* Empty Placeholder */
+    /* Empty state */
     .placeholder-state {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 480px;
+      height: 500px;
       text-align: center;
       color: var(--text-muted);
-      gap: 1rem;
+      gap: 1.2rem;
     }
 
     .placeholder-icon {
-      width: 70px;
-      height: 70px;
-      border-radius: 20px;
+      width: 76px;
+      height: 76px;
+      border-radius: 22px;
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--card-border);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.8rem;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+      font-size: 2rem;
+      box-shadow: 0 0 35px rgba(0, 0, 0, 0.6);
+      color: var(--aura-cyan);
     }
 
-    /* Modal for API Key */
+    /* Modal */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -458,20 +487,20 @@
     }
 
     .modal-box {
-      background: #111420;
+      background: #0d121f;
       border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 2rem;
+      border-radius: 22px;
+      padding: 2.2rem;
       max-width: 480px;
       width: 90%;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
       display: flex;
       flex-direction: column;
-      gap: 1.2rem;
+      gap: 1.3rem;
     }
 
     .modal-box h3 {
-      font-size: 1.25rem;
+      font-size: 1.3rem;
       font-weight: 700;
       background: linear-gradient(90deg, #fff, var(--aura-cyan));
       -webkit-background-clip: text;
@@ -480,10 +509,10 @@
 
     .modal-input {
       width: 100%;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.5);
       border: 1px solid var(--card-border);
-      padding: 0.8rem 1rem;
-      border-radius: 10px;
+      padding: 0.85rem 1.1rem;
+      border-radius: 12px;
       color: #fff;
       font-family: var(--font-code);
       font-size: 0.9rem;
@@ -503,26 +532,34 @@
 </head>
 <body>
 
-  <!-- Ambient Glowing Backgrounds -->
+  <!-- Background Ambience -->
   <div class="aura-glow-1"></div>
   <div class="aura-glow-2"></div>
 
   <div class="app-container">
-    <!-- Top Bar -->
+    <!-- Header -->
     <header>
       <div class="brand">
         <div class="brand-icon">⚡</div>
         <div class="brand-text">
           <h1>AURA CODE</h1>
-          <p>Architectural High-Level Code Synthesizer</p>
+          <p>Autonomous Next-Gen AI Code Synthesizer</p>
         </div>
       </div>
 
       <div class="header-actions">
-        <div class="model-badge">
+        <!-- New Modern Model Selector -->
+        <div class="model-selector-wrapper">
           <div class="status-dot"></div>
-          <span>gemini-2.5-flash</span>
+          <select id="modelSelector" class="model-select" onchange="handleModelChange(this.value)">
+            <option value="gemini-3.5-lite" selected>gemini-3.5-lite (Ultra Fast)</option>
+            <option value="gemini-3.5-flash">gemini-3.5-flash (Fast & Accurate)</option>
+            <option value="gemini-3.1-pro">gemini-3.1-pro (Deep Architecture)</option>
+            <option value="gemini-3-pro">gemini-3-pro (High Reasoning)</option>
+            <option value="custom">⚙ Custom Model ID...</option>
+          </select>
         </div>
+
         <button class="api-key-btn" onclick="openKeyModal()">
           🔑 <span id="keyBtnLabel">Set API Key</span>
         </button>
@@ -531,43 +568,46 @@
 
     <!-- Workspace -->
     <main class="workspace">
-      <!-- Left Panel: Control & Directives -->
+      <!-- Left Panel -->
       <section class="control-panel">
-        <span class="panel-section-title">Target Ecosystem / Architecture</span>
+        <span class="panel-section-title">Target Architecture / Stack</span>
         <div class="stack-select-grid" id="stackGrid">
-          <button class="stack-option active" data-stack="Full Stack Web (Next.js/Node/Tailwind)">Full Stack Web</button>
-          <button class="stack-option" data-stack="High-Performance Backend (Go/Rust)">Go / Rust Engine</button>
-          <button class="stack-option" data-stack="Python Fast Microservices & AI">Python / FastAPI</button>
-          <button class="stack-option" data-stack="Modern Mobile App (Flutter/React Native)">Mobile Native</button>
-          <button class="stack-option" data-stack="Clean Architecture / Microservices">Microservices</button>
-          <button class="stack-option" data-stack="Custom Single File App">Single File App</button>
+          <button class="stack-option active" data-stack="Full Stack Web (Next.js / Node / Tailwind)">Full Stack Web</button>
+          <button class="stack-option" data-stack="High-Performance Systems (Go / Rust / gRPC)">Go / Rust Engine</button>
+          <button class="stack-option" data-stack="AI Engine & Python (FastAPI / LangChain)">Python / AI Engine</button>
+          <button class="stack-option" data-stack="Distributed Microservices & Cloud-Native">Cloud Native / K8s</button>
+          <button class="stack-option" data-stack="Native Mobile Application (Flutter / React Native)">Mobile Native</button>
+          <button class="stack-option" data-stack="Clean High-Speed Single File Web App">Single File App</button>
         </div>
 
-        <span class="panel-section-title">Quick Architect Presets</span>
+        <!-- Custom Model Input (if custom selected) -->
+        <input type="text" id="customModelInput" class="custom-model-box" placeholder="e.g. gemini-3.5-lite-preview" />
+
+        <span class="panel-section-title">Quick Architecture Presets</span>
         <div class="preset-pills">
-          <span class="pill" onclick="applyPreset('Build a complete JWT Authentication system with refresh tokens, rate limiting, and password hashing.')">JWT Auth System</span>
-          <span class="pill" onclick="applyPreset('Create a reactive state management store with undo/redo and localStorage persistence.')">State Manager</span>
-          <span class="pill" onclick="applyPreset('Develop a WebSocket real-time chat server with presence indicators and rooms.')">WebSocket Server</span>
-          <span class="pill" onclick="applyPreset('Write an automated asynchronous web scraper with concurrency limits and retries.')">Async Scraper</span>
+          <span class="pill" onclick="applyPreset('Build a complete enterprise RBAC authentication system with JWT, refresh rotation, rate limiting, and password hashing.')">Enterprise RBAC</span>
+          <span class="pill" onclick="applyPreset('Design an ultra high-speed distributed event broker queue with worker concurrency and retry policies.')">Distributed Queue</span>
+          <span class="pill" onclick="applyPreset('Create a reactive state management store with undo/redo, timeline tracking, and persistence.')">State Manager</span>
+          <span class="pill" onclick="applyPreset('Develop a high-performance Redis sliding-window rate-limiter middleware with Prometheus metrics.')">Rate Limiter</span>
         </div>
 
         <span class="panel-section-title">Software Specification Prompt</span>
-        <textarea id="promptInput" class="prompt-box" placeholder="उदा: Design a high-concurrency rate-limiter middleware using Redis sliding-window counter algorithm with TypeScript..."></textarea>
+        <textarea id="promptInput" class="prompt-box" placeholder="उदा: Design a full microservice architecture for real-time multiplayer state synchronization using WebSockets, Redis pub/sub, and Rust..."></textarea>
 
         <button id="generateBtn" class="generate-btn" onclick="generateHighLevelCode()">
-          <span>Generate Software Code</span>
+          <span>Generate High-Level Code</span>
           <span>✦</span>
         </button>
       </section>
 
-      <!-- Right Panel: High-End Code Output -->
+      <!-- Right Panel: Viewport -->
       <section class="output-viewport">
         <div class="viewport-header">
           <div class="viewport-title">
-            <span>Terminal & Blueprint Canvas</span>
+            <span>Terminal & Architecture Blueprint</span>
           </div>
           <div class="viewport-actions">
-            <button class="tool-btn" onclick="copyCurrentCode()">📋 Copy Code</button>
+            <button class="tool-btn" onclick="copyCurrentCode()">📋 Copy All</button>
             <button class="tool-btn" onclick="downloadCode()">💾 Download Source</button>
           </div>
         </div>
@@ -576,8 +616,8 @@
           <div class="placeholder-state">
             <div class="placeholder-icon">⌬</div>
             <h3 style="font-weight: 700; color: #fff;">Aura Code Engine Ready</h3>
-            <p style="max-width: 400px; font-size: 0.9rem;">
-              आपन सॉफ्टवेयर आइडिया भा आर्किटेक्चर रिक्वायरमेंट बाएं तरफ लिखीं आ 'Generate' दबाईं। Gemini 2.5 Flash सेकंडन में पूरा क्लीन कोड बना दी।
+            <p style="max-width: 440px; font-size: 0.9rem;">
+              आपन सॉफ्टवेयर आइडिया भा आर्किटेक्चर रिक्वायरमेंट बाएं तरफ लिखीं। जेमिनी 3.5 लाइट आ 3.1 प्रो जइसन आधुनिक मॉडल्स सीधे प्रोडक्शन-ग्रेड कोड तैयार कइ दीहें।
             </p>
           </div>
         </div>
@@ -590,7 +630,7 @@
     <div class="modal-box">
       <h3>Enter Gemini API Key</h3>
       <p style="font-size: 0.85rem; color: var(--text-muted);">
-        आपन Google AI Studio से मिलल API Key पेस्ट करीं। ई सीधे रउआ ब्राउज़र के लोकल स्टोरेज (LocalStorage) में सुरक्षित रही।
+        आपन Google AI Studio से मिलल API Key पेस्ट करीं। ई सीधे रउआ लोकल ब्राउज़र स्टोरेज (LocalStorage) में सुरक्षित रही।
       </p>
       <input type="password" id="apiKeyField" class="modal-input" placeholder="AIzaSy..." />
       <div class="modal-btn-row">
@@ -601,8 +641,7 @@
   </div>
 
   <script>
-    // State
-    let selectedStack = 'Full Stack Web (Next.js/Node/Tailwind)';
+    let selectedStack = 'Full Stack Web (Next.js / Node / Tailwind)';
     let rawGeneratedMarkdown = '';
 
     // Stack Selection
@@ -613,6 +652,26 @@
         selectedStack = btn.getAttribute('data-stack');
       });
     });
+
+    // Model Selector Change Handler
+    function handleModelChange(val) {
+      const customInput = document.getElementById('customModelInput');
+      if (val === 'custom') {
+        customInput.style.display = 'block';
+        customInput.focus();
+      } else {
+        customInput.style.display = 'none';
+      }
+    }
+
+    function getActiveModel() {
+      const selected = document.getElementById('modelSelector').value;
+      if (selected === 'custom') {
+        const customVal = document.getElementById('customModelInput').value.trim();
+        return customVal || 'gemini-3.5-lite';
+      }
+      return selected;
+    }
 
     // Preset selection
     function applyPreset(text) {
@@ -651,12 +710,11 @@
       }
     }
 
-    // Initialize key check
     window.addEventListener('DOMContentLoaded', () => {
       updateKeyButtonLabel();
     });
 
-    // Code Generator Call
+    // Core Generation API Call
     async function generateHighLevelCode() {
       const prompt = document.getElementById('promptInput').value.trim();
       const apiKey = localStorage.getItem('aura_gemini_api_key');
@@ -667,34 +725,34 @@
       }
 
       if (!prompt) {
-        alert('कृपा करके कवनो सॉफ्टवेयर प्रोजेक्ट भा कोड के विवरण लिखीं!');
+        alert('कृपया कवनो सॉफ्टवेयर प्रोजेक्ट भा कोड के विवरण लिखीं!');
         return;
       }
 
+      const activeModel = getActiveModel();
       const generateBtn = document.getElementById('generateBtn');
       const viewport = document.getElementById('viewportContent');
 
       generateBtn.disabled = true;
-      generateBtn.innerHTML = `<span>Synthesizing Architecture...</span>`;
+      generateBtn.innerHTML = `<span>Synthesizing via ${activeModel}...</span>`;
       
       viewport.innerHTML = `
         <div class="placeholder-state">
-          <div class="status-dot" style="width: 24px; height: 24px; animation: pulseAura 1s infinite alternate;"></div>
-          <h3 style="color: var(--aura-cyan);">Aura Code Engine Processing...</h3>
-          <p style="font-size: 0.85rem;">Gemini 2.5 Flash सबले तेज स्पीड में हाई-लेवल कोड आर्किटेक्चर जनरेट करत बा...</p>
+          <div class="status-dot" style="width: 24px; height: 24px; animation: pulseAura 0.8s infinite alternate;"></div>
+          <h3 style="color: var(--aura-cyan);">Synthesizing Architecture via ${activeModel}...</h3>
+          <p style="font-size: 0.85rem;">हाई-लेवल प्रोडक्शन कोड जनरेट हो रहल बा, कृपया कुछ सेकंड धीरज रखीं...</p>
         </div>
       `;
 
-      // System Prompt tailored for Senior Staff Software Architecture
-      const systemInstruction = `You are Aura Code, an elite Principal Staff Software Architect.
+      const systemInstruction = `You are Aura Code, an elite Principal Software Architect.
 Your task is to generate complete, high-level, production-ready code based on the user's requirements.
-Guidelines:
-1. Deliver fully functional, clean, idiomatic code without placeholders or "left as exercise" shortcuts.
-2. Adhere to Clean Architecture, SOLID principles, optimal error handling, and robust type safety.
+Strict Rules:
+1. Provide completely working, production-grade code. Never use lazy placeholders like '// write code here' or 'left as an exercise'.
+2. Strictly implement SOLID principles, Clean Architecture, complete error boundary logic, and type safety.
 3. Target stack: ${selectedStack}.
-4. Provide structured architectural overview, file tree if multi-file, followed by clean markdown code blocks with correct language identifiers.`;
+4. Provide structured overview, file structure breakdown, followed by complete markdown code blocks with exact language identifiers.`;
 
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${activeModel}:generateContent?key=${apiKey}`;
 
       try {
         const response = await fetch(endpoint, {
@@ -711,7 +769,7 @@ Guidelines:
               parts: [{ text: systemInstruction }]
             },
             generationConfig: {
-              temperature: 0.2,
+              temperature: 0.15,
               maxOutputTokens: 8192
             }
           })
@@ -720,7 +778,7 @@ Guidelines:
         const data = await response.json();
 
         if (data.error) {
-          throw new Error(data.error.message || 'API Error occurred');
+          throw new Error(data.error.message || 'API request failed');
         }
 
         const generatedText = data.candidates?.[0]?.content?.parts?.[0]?.text;
@@ -731,29 +789,28 @@ Guidelines:
 
         rawGeneratedMarkdown = generatedText;
         
-        // Render Markdown & Code
         viewport.innerHTML = marked.parse(generatedText);
         
-        // Highlight all code blocks
+        // Highlight generated code
         viewport.querySelectorAll('pre code').forEach((block) => {
           hljs.highlightElement(block);
         });
 
       } catch (err) {
         viewport.innerHTML = `
-          <div style="padding: 2rem; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; color: #fca5a5;">
-            <h4 style="font-weight: 700; margin-bottom: 0.5rem;">Generation Error</h4>
+          <div style="padding: 2rem; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); border-radius: 14px; color: #fca5a5;">
+            <h4 style="font-weight: 700; margin-bottom: 0.5rem;">API Execution Error (${activeModel})</h4>
             <p style="font-size: 0.9rem;">${err.message}</p>
-            <p style="margin-top: 1rem; font-size: 0.8rem; color: #fff;">कृपया आपन API Key चेक करीं भा इंटरनेट कनेक्शन जाँचीं।</p>
+            <p style="margin-top: 1rem; font-size: 0.8rem; color: #cbd5e1;">कृपया आपन API Key चेक करीं भा चुनल गइल मॉडल के नाम जाँचीं।</p>
           </div>
         `;
       } finally {
         generateBtn.disabled = false;
-        generateBtn.innerHTML = `<span>Generate Software Code</span><span>✦</span>`;
+        generateBtn.innerHTML = `<span>Generate High-Level Code</span><span>✦</span>`;
       }
     }
 
-    // Copy Generated Code Only
+    // Copy Code Action
     function copyCurrentCode() {
       const codeElements = document.querySelectorAll('#viewportContent pre code');
       if (codeElements.length === 0) {
@@ -768,14 +825,14 @@ Guidelines:
 
       let allCode = '';
       codeElements.forEach((el, index) => {
-        allCode += `// --- Block ${index + 1} ---\n` + el.innerText + '\n\n';
+        allCode += `// ================= [File/Block ${index + 1}] =================\n` + el.innerText + '\n\n';
       });
 
       navigator.clipboard.writeText(allCode);
-      alert('सभ कोड ब्लॉक्स क्लिपबोर्ड में कॉपी हो गइल!');
+      alert('सभ कोड ब्लॉक्स क्लिपबोर्ड पर कॉपी हो गइल बा!');
     }
 
-    // Download Source Code
+    // Download Source Markdown
     function downloadCode() {
       if (!rawGeneratedMarkdown) {
         alert('डाउनलोड करे खातिर पहिले कोड जनरेट करीं!');
@@ -786,7 +843,7 @@ Guidelines:
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `aura-code-${Date.now()}.md`;
+      a.download = `aura-architecture-${Date.now()}.md`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
