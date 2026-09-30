@@ -1,665 +1,797 @@
-package com.auracoder.app
-
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-
-private val Background = Color(0xFF080A10)
-private val Card = Color(0xFF11151F)
-private val Card2 = Color(0xFF181D29)
-private val White = Color(0xFFF5F7FF)
-private val Gray = Color(0xFF8D96AA)
-private val Purple = Color(0xFF8B5CF6)
-private val Green = Color(0xFF22C55E)
-
-class MainActivity : ComponentActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContent {
-            AuraCoder()
-        }
-    }
-}
-
-@Composable
-fun AuraCoder() {
-
-    var language by remember {
-        mutableStateOf("Python")
-    }
-
-    var prompt by remember {
-        mutableStateOf("")
-    }
-
-    var code by remember {
-        mutableStateOf(
-            """
-# Welcome to Aura Coder
-
-def hello():
-    print("Hello from Aura Coder!")
-
-hello()
-""".trimIndent()
-        )
-    }
-
-    var output by remember {
-        mutableStateOf("Aura Coder is ready.")
-    }
-
-    var showLanguages by remember {
-        mutableStateOf(false)
-    }
-
-    MaterialTheme(
-        colorScheme = darkColorScheme(
-            background = Background,
-            surface = Card,
-            primary = Purple
-        )
-    ) {
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Background)
-                .statusBarsPadding()
-        ) {
-
-            TopBar()
-
-            FileTabs(language)
-
-            LanguageSelector(
-                language = language,
-                expanded = showLanguages,
-                onClick = {
-                    showLanguages = !showLanguages
-                },
-                onSelect = {
-                    language = it
-                    showLanguages = false
-                }
-            )
-
-            Editor(
-                code = code,
-                onCodeChange = {
-                    code = it
-                }
-            )
-
-            AuraAI(
-                prompt = prompt,
-                onPromptChange = {
-                    prompt = it
-                },
-                onGenerate = {
-
-                    if (prompt.isNotBlank()) {
-
-                        code = generateCode(
-                            language,
-                            prompt
-                        )
-
-                        output =
-                            "✨ Aura generated $language code."
-
-                        prompt = ""
-                    }
-                }
-            )
-
-            BottomActions(
-                onRun = {
-                    output =
-                        "▶ Running $language code..."
-                },
-                onExport = {
-                    output =
-                        "Code exported successfully."
-                }
-            )
-
-            Text(
-                text = output,
-                color = Gray,
-                fontSize = 11.sp,
-                modifier = Modifier.padding(
-                    start = 16.dp,
-                    end = 16.dp,
-                    bottom = 12.dp
-                )
-            )
-        }
-    }
-}
-
-@Composable
-fun TopBar() {
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        Box(
-            modifier = Modifier
-                .size(44.dp)
-                .background(
-                    Purple,
-                    RoundedCornerShape(14.dp)
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-
-            Text(
-                text = "A",
-                color = Color.White,
-                fontSize = 23.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-
-        Spacer(
-            modifier = Modifier.width(12.dp)
-        )
-
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-
-            Text(
-                text = "Aura Coder",
-                color = White,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
-
-            Text(
-                text = "AI Coding Studio",
-                color = Gray,
-                fontSize = 11.sp
-            )
-        }
-
-        IconButton(onClick = {}) {
-
-            Icon(
-                Icons.Default.Search,
-                contentDescription = "Search",
-                tint = White
-            )
-        }
-
-        IconButton(onClick = {}) {
-
-            Icon(
-                Icons.Default.Settings,
-                contentDescription = "Settings",
-                tint = White
-            )
-        }
-    }
-}
-
-@Composable
-fun FileTabs(language: String) {
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Card)
-            .horizontalScroll(
-                rememberScrollState()
-            )
-            .padding(horizontal = 8.dp)
-    ) {
-
-        Text(
-            text = "main.${extension(language)}",
-            color = White,
-            fontSize = 12.sp,
-            modifier = Modifier.padding(
-                horizontal = 14.dp,
-                vertical = 12.dp
-            )
-        )
-
-        Text(
-            text = "+",
-            color = Gray,
-            fontSize = 18.sp,
-            modifier = Modifier.padding(
-                horizontal = 14.dp,
-                vertical = 8.dp
-            )
-        )
-    }
-}
-
-@Composable
-fun LanguageSelector(
-    language: String,
-    expanded: Boolean,
-    onClick: () -> Unit,
-    onSelect: (String) -> Unit
-) {
-
-    Column(
-        modifier = Modifier.padding(12.dp)
-    ) {
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    Card2,
-                    RoundedCornerShape(14.dp)
-                )
-                .clickable {
-                    onClick()
-                }
-                .padding(15.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Text(
-                text = "LANGUAGE",
-                color = Gray,
-                fontSize = 10.sp,
-                fontWeight = FontWeight.Bold
-            )
-
-            Spacer(
-                modifier = Modifier.width(14.dp)
-            )
-
-            Text(
-                text = language,
-                color = White,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.weight(1f)
-            )
-
-            Icon(
-                Icons.Default.ExpandMore,
-                contentDescription = null,
-                tint = Gray
-            )
-        }
-
-        if (expanded) {
-
-            LanguageMenu(
-                onSelect = onSelect
-            )
-        }
-    }
-}
-
-@Composable
-fun LanguageMenu(
-    onSelect: (String) -> Unit
-) {
-
-    val languages = listOf(
-        "Python",
-        "JavaScript",
-        "TypeScript",
-        "Java",
-        "Kotlin",
-        "C",
-        "C++",
-        "C#",
-        "Go",
-        "Rust",
-        "PHP",
-        "Swift",
-        "Dart",
-        "HTML",
-        "CSS",
-        "SQL",
-        "Ruby"
-    )
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                Color(0xFF1B2030),
-                RoundedCornerShape(14.dp)
-            )
-            .padding(8.dp)
-    ) {
-
-        languages.chunked(2).forEach { row ->
-
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-
-                row.forEach { language ->
-
-                    Text(
-                        text = language,
-                        color = White,
-                        fontSize = 12.sp,
-                        modifier = Modifier
-                            .weight(1f)
-                            .clickable {
-                                onSelect(language)
-                            }
-                            .padding(10.dp)
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun Editor(
-    code: String,
-    onCodeChange: (String) -> Unit
-) {
-
-    Column(
-        modifier = Modifier
-            .weight(1f)
-            .padding(horizontal = 12.dp)
-    ) {
-
-        Text(
-            text = "CODE EDITOR",
-            color = Gray,
-            fontSize = 10.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(
-                start = 4.dp,
-                bottom = 6.dp
-            )
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Color(0xFF0D1017),
-                    RoundedCornerShape(16.dp)
-                )
-        ) {
-
-            BasicTextField(
-                value = code,
-                onValueChange = onCodeChange,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                textStyle = TextStyle(
-                    color = Color(0xFFD8DEE9),
-                    fontSize = 14.sp,
-                    lineHeight = 21.sp,
-                    fontFamily = FontFamily.Monospace
-                )
-            )
-        }
-    }
-}
-
-@Composable
-fun AuraAI(
-    prompt: String,
-    onPromptChange: (String) -> Unit,
-    onGenerate: () -> Unit
-) {
-
-    Column(
-        modifier = Modifier.padding(
-            top = 10.dp,
-            start = 12.dp,
-            end = 12.dp
-        )
-    ) {
-
-        Text(
-            text = "AURA AI",
-            color = Gray,
-            fontSize = 10.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(
-                start = 4.dp,
-                bottom = 6.dp
-            )
-        )
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    Card,
-                    RoundedCornerShape(14.dp)
-                )
-                .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            BasicTextField(
-                value = prompt,
-                onValueChange = onPromptChange,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp),
-                textStyle = TextStyle(
-                    color = White,
-                    fontSize = 13.sp
-                ),
-                decorationBox = { innerTextField ->
-
-                    if (prompt.isEmpty()) {
-
-                        Text(
-                            "Ask Aura to write code...",
-                            color = Gray,
-                            fontSize = 13.sp
-                        )
-                    }
-
-                    innerTextField()
-                }
-            )
-
-            IconButton(
-                onClick = onGenerate
-            ) {
-
-                Icon(
-                    Icons.Default.AutoAwesome,
-                    contentDescription = "Generate",
-                    tint = Purple
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun BottomActions(
-    onRun: () -> Unit,
-    onExport: () -> Unit
-) {
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-
-        Button(
-            onClick = onRun,
-            modifier = Modifier.weight(1f),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Green
-            ),
-            shape = RoundedCornerShape(12.dp)
-        ) {
-
-            Icon(
-                Icons.Default.PlayArrow,
-                contentDescription = null
-            )
-
-            Spacer(
-                modifier = Modifier.width(5.dp)
-            )
-
-            Text(
-                "RUN",
-                fontWeight = FontWeight.Bold
-            )
-        }
-
-        OutlinedButton(
-            onClick = onExport,
-            modifier = Modifier.weight(1f),
-            shape = RoundedCornerShape(12.dp)
-        ) {
-
-            Icon(
-                Icons.Default.Download,
-                contentDescription = null
-            )
-
-            Spacer(
-                modifier = Modifier.width(5.dp)
-            )
-
-            Text("EXPORT")
-        }
-    }
-}
-
-fun extension(language: String): String {
-
-    return when (language) {
-
-        "Python" -> "py"
-        "JavaScript" -> "js"
-        "TypeScript" -> "ts"
-        "Java" -> "java"
-        "Kotlin" -> "kt"
-        "C" -> "c"
-        "C++" -> "cpp"
-        "C#" -> "cs"
-        "Go" -> "go"
-        "Rust" -> "rs"
-        "PHP" -> "php"
-        "Swift" -> "swift"
-        "Dart" -> "dart"
-        "HTML" -> "html"
-        "CSS" -> "css"
-        "SQL" -> "sql"
-        "Ruby" -> "rb"
-
-        else -> "txt"
-    }
-}
-
-fun generateCode(
-    language: String,
-    prompt: String
-): String {
-
-    return when (language) {
-
-        "Python" -> """
-# Generated by Aura Coder
-
-# Request:
-# $prompt
-
-def main():
-
-    print("Aura Coder generated this solution.")
-
-if __name__ == "__main__":
-    main()
-""".trimIndent()
-
-        "JavaScript" -> """
-// Generated by Aura Coder
-
-// Request:
-// $prompt
-
-function main() {
-
-    console.log(
-        "Aura Coder generated this solution."
-    );
-}
-
-main();
-""".trimIndent()
-
-        "HTML" -> """
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aura Code | High-Level AI Software Architect</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Highlight.js for Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tokyo-night-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  
+  <!-- Marked.js for Markdown Parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-    <title>Aura Coder</title>
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(16, 20, 31, 0.7);
+      --card-border: rgba(147, 197, 253, 0.12);
+      --aura-cyan: #00f2fe;
+      --aura-purple: #7928ca;
+      --aura-pink: #ff0080;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --code-bg: #0d1117;
+      --font-ui: 'Plus Jakarta Sans', sans-serif;
+      --font-code: 'Fira Code', monospace;
+    }
 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font-ui);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient Background Aura Lights */
+    .aura-glow-1 {
+      position: fixed;
+      top: -150px;
+      left: 10%;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, rgba(121, 40, 202, 0.28) 0%, transparent 70%);
+      filter: blur(90px);
+      z-index: 0;
+      pointer-events: none;
+      animation: pulseAura 8s infinite alternate ease-in-out;
+    }
+
+    .aura-glow-2 {
+      position: fixed;
+      bottom: -150px;
+      right: 5%;
+      width: 650px;
+      height: 650px;
+      background: radial-gradient(circle, rgba(0, 242, 254, 0.2) 0%, transparent 70%);
+      filter: blur(100px);
+      z-index: 0;
+      pointer-events: none;
+      animation: pulseAura 10s infinite alternate-reverse ease-in-out;
+    }
+
+    @keyframes pulseAura {
+      0% { transform: scale(1) translate(0, 0); opacity: 0.6; }
+      100% { transform: scale(1.15) translate(30px, -20px); opacity: 0.9; }
+    }
+
+    .app-container {
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem 4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--aura-purple), var(--aura-cyan));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: #fff;
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
+    }
+
+    .brand-text h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(90deg, #ffffff, #93c5fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-text p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .model-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      padding: 0.45rem 0.9rem;
+      border-radius: 9999px;
+      background: rgba(0, 242, 254, 0.08);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      color: var(--aura-cyan);
+      font-family: var(--font-code);
+      font-weight: 500;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10b981;
+    }
+
+    .api-key-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.5rem 1.1rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .api-key-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Main Grid Layout */
+    .workspace {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left Control Panel */
+    .control-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      backdrop-filter: blur(20px);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .panel-section-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .stack-select-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+    }
+
+    .stack-option {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 0.65rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .stack-option:hover, .stack-option.active {
+      background: linear-gradient(135deg, rgba(121, 40, 202, 0.25), rgba(0, 242, 254, 0.25));
+      border-color: var(--aura-cyan);
+      box-shadow: 0 0 14px rgba(0, 242, 254, 0.2);
+    }
+
+    .prompt-box {
+      width: 100%;
+      min-height: 180px;
+      background: rgba(10, 13, 20, 0.7);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1rem;
+      color: #fff;
+      font-family: var(--font-ui);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .prompt-box:focus {
+      border-color: var(--aura-cyan);
+      box-shadow: 0 0 16px rgba(0, 242, 254, 0.25);
+    }
+
+    .generate-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #7928ca 0%, #00f2fe 100%);
+      color: #fff;
+      border: none;
+      padding: 0.9rem;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(0, 242, 254, 0.35);
+    }
+
+    .generate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 26px rgba(0, 242, 254, 0.5);
+    }
+
+    .generate-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .preset-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .pill {
+      font-size: 0.75rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      padding: 0.35rem 0.65rem;
+      border-radius: 20px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .pill:hover {
+      color: var(--aura-cyan);
+      border-color: var(--aura-cyan);
+    }
+
+    /* Right Display Viewport */
+    .output-viewport {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      min-height: 600px;
+      backdrop-filter: blur(20px);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .viewport-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.9rem 1.4rem;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(10, 13, 20, 0.5);
+    }
+
+    .viewport-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .viewport-actions {
+      display: flex;
+      gap: 0.6rem;
+    }
+
+    .tool-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tool-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--aura-cyan);
+      color: var(--aura-cyan);
+    }
+
+    .viewport-content {
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex-grow: 1;
+      line-height: 1.6;
+    }
+
+    /* Markdown & Code Style */
+    .viewport-content h1, .viewport-content h2, .viewport-content h3 {
+      color: #fff;
+      margin: 1.2rem 0 0.6rem;
+      letter-spacing: -0.3px;
+    }
+
+    .viewport-content p {
+      margin-bottom: 0.9rem;
+      color: #cbd5e1;
+    }
+
+    .viewport-content pre {
+      position: relative;
+      background: var(--code-bg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 1rem;
+      margin: 1.2rem 0;
+      overflow-x: auto;
+      font-family: var(--font-code);
+      font-size: 0.88rem;
+    }
+
+    .viewport-content code {
+      font-family: var(--font-code);
+    }
+
+    .viewport-content p code {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.2rem 0.4rem;
+      border-radius: 5px;
+      color: var(--aura-cyan);
+      font-size: 0.85em;
+    }
+
+    /* Empty Placeholder */
+    .placeholder-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 480px;
+      text-align: center;
+      color: var(--text-muted);
+      gap: 1rem;
+    }
+
+    .placeholder-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Modal for API Key */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: #111420;
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 480px;
+      width: 90%;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .modal-box h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #fff, var(--aura-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .modal-input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--card-border);
+      padding: 0.8rem 1rem;
+      border-radius: 10px;
+      color: #fff;
+      font-family: var(--font-code);
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .modal-input:focus {
+      border-color: var(--aura-cyan);
+    }
+
+    .modal-btn-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.8rem;
+    }
+  </style>
 </head>
-
 <body>
 
-    <h1>$prompt</h1>
+  <!-- Ambient Glowing Backgrounds -->
+  <div class="aura-glow-1"></div>
+  <div class="aura-glow-2"></div>
 
-</body>
+  <div class="app-container">
+    <!-- Top Bar -->
+    <header>
+      <div class="brand">
+        <div class="brand-icon">⚡</div>
+        <div class="brand-text">
+          <h1>AURA CODE</h1>
+          <p>Architectural High-Level Code Synthesizer</p>
+        </div>
+      </div>
 
-</html>
-""".trimIndent()
+      <div class="header-actions">
+        <div class="model-badge">
+          <div class="status-dot"></div>
+          <span>gemini-2.5-flash</span>
+        </div>
+        <button class="api-key-btn" onclick="openKeyModal()">
+          🔑 <span id="keyBtnLabel">Set API Key</span>
+        </button>
+      </div>
+    </header>
 
-        else -> """
-// Aura Coder
-// Language: $language
+    <!-- Workspace -->
+    <main class="workspace">
+      <!-- Left Panel: Control & Directives -->
+      <section class="control-panel">
+        <span class="panel-section-title">Target Ecosystem / Architecture</span>
+        <div class="stack-select-grid" id="stackGrid">
+          <button class="stack-option active" data-stack="Full Stack Web (Next.js/Node/Tailwind)">Full Stack Web</button>
+          <button class="stack-option" data-stack="High-Performance Backend (Go/Rust)">Go / Rust Engine</button>
+          <button class="stack-option" data-stack="Python Fast Microservices & AI">Python / FastAPI</button>
+          <button class="stack-option" data-stack="Modern Mobile App (Flutter/React Native)">Mobile Native</button>
+          <button class="stack-option" data-stack="Clean Architecture / Microservices">Microservices</button>
+          <button class="stack-option" data-stack="Custom Single File App">Single File App</button>
+        </div>
 
-// Request:
-// $prompt
+        <span class="panel-section-title">Quick Architect Presets</span>
+        <div class="preset-pills">
+          <span class="pill" onclick="applyPreset('Build a complete JWT Authentication system with refresh tokens, rate limiting, and password hashing.')">JWT Auth System</span>
+          <span class="pill" onclick="applyPreset('Create a reactive state management store with undo/redo and localStorage persistence.')">State Manager</span>
+          <span class="pill" onclick="applyPreset('Develop a WebSocket real-time chat server with presence indicators and rooms.')">WebSocket Server</span>
+          <span class="pill" onclick="applyPreset('Write an automated asynchronous web scraper with concurrency limits and retries.')">Async Scraper</span>
+        </div>
 
-// AI generated code will appear here.
-""".trimIndent()
+        <span class="panel-section-title">Software Specification Prompt</span>
+        <textarea id="promptInput" class="prompt-box" placeholder="उदा: Design a high-concurrency rate-limiter middleware using Redis sliding-window counter algorithm with TypeScript..."></textarea>
+
+        <button id="generateBtn" class="generate-btn" onclick="generateHighLevelCode()">
+          <span>Generate Software Code</span>
+          <span>✦</span>
+        </button>
+      </section>
+
+      <!-- Right Panel: High-End Code Output -->
+      <section class="output-viewport">
+        <div class="viewport-header">
+          <div class="viewport-title">
+            <span>Terminal & Blueprint Canvas</span>
+          </div>
+          <div class="viewport-actions">
+            <button class="tool-btn" onclick="copyCurrentCode()">📋 Copy Code</button>
+            <button class="tool-btn" onclick="downloadCode()">💾 Download Source</button>
+          </div>
+        </div>
+
+        <div id="viewportContent" class="viewport-content">
+          <div class="placeholder-state">
+            <div class="placeholder-icon">⌬</div>
+            <h3 style="font-weight: 700; color: #fff;">Aura Code Engine Ready</h3>
+            <p style="max-width: 400px; font-size: 0.9rem;">
+              आपन सॉफ्टवेयर आइडिया भा आर्किटेक्चर रिक्वायरमेंट बाएं तरफ लिखीं आ 'Generate' दबाईं। Gemini 2.5 Flash सेकंडन में पूरा क्लीन कोड बना दी।
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- API Key Modal -->
+  <div id="apiModal" class="modal-overlay">
+    <div class="modal-box">
+      <h3>Enter Gemini API Key</h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted);">
+        आपन Google AI Studio से मिलल API Key पेस्ट करीं। ई सीधे रउआ ब्राउज़र के लोकल स्टोरेज (LocalStorage) में सुरक्षित रही।
+      </p>
+      <input type="password" id="apiKeyField" class="modal-input" placeholder="AIzaSy..." />
+      <div class="modal-btn-row">
+        <button class="api-key-btn" onclick="closeKeyModal()">Cancel</button>
+        <button class="generate-btn" style="width: auto; padding: 0.6rem 1.4rem;" onclick="saveApiKey()">Save Key</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State
+    let selectedStack = 'Full Stack Web (Next.js/Node/Tailwind)';
+    let rawGeneratedMarkdown = '';
+
+    // Stack Selection
+    document.querySelectorAll('.stack-option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.stack-option').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedStack = btn.getAttribute('data-stack');
+      });
+    });
+
+    // Preset selection
+    function applyPreset(text) {
+      document.getElementById('promptInput').value = text;
     }
-}
 
-Important: this gives you the app UI and local demo generator. For Aura Coder to actually generate advanced code using an AI model, the "generateCode()" function should be connected to an AI API through a secure backend rather than putting an API key inside the APK.
+    // Modal Control
+    function openKeyModal() {
+      const storedKey = localStorage.getItem('aura_gemini_api_key') || '';
+      document.getElementById('apiKeyField').value = storedKey;
+      document.getElementById('apiModal').classList.add('open');
+    }
+
+    function closeKeyModal() {
+      document.getElementById('apiModal').classList.remove('open');
+    }
+
+    function saveApiKey() {
+      const key = document.getElementById('apiKeyField').value.trim();
+      if (key) {
+        localStorage.setItem('aura_gemini_api_key', key);
+        updateKeyButtonLabel();
+        closeKeyModal();
+      }
+    }
+
+    function updateKeyButtonLabel() {
+      const key = localStorage.getItem('aura_gemini_api_key');
+      const label = document.getElementById('keyBtnLabel');
+      if (key) {
+        label.innerText = 'Key Configured ✓';
+        label.style.color = '#10b981';
+      } else {
+        label.innerText = 'Set API Key';
+        label.style.color = 'inherit';
+      }
+    }
+
+    // Initialize key check
+    window.addEventListener('DOMContentLoaded', () => {
+      updateKeyButtonLabel();
+    });
+
+    // Code Generator Call
+    async function generateHighLevelCode() {
+      const prompt = document.getElementById('promptInput').value.trim();
+      const apiKey = localStorage.getItem('aura_gemini_api_key');
+
+      if (!apiKey) {
+        openKeyModal();
+        return;
+      }
+
+      if (!prompt) {
+        alert('कृपा करके कवनो सॉफ्टवेयर प्रोजेक्ट भा कोड के विवरण लिखीं!');
+        return;
+      }
+
+      const generateBtn = document.getElementById('generateBtn');
+      const viewport = document.getElementById('viewportContent');
+
+      generateBtn.disabled = true;
+      generateBtn.innerHTML = `<span>Synthesizing Architecture...</span>`;
+      
+      viewport.innerHTML = `
+        <div class="placeholder-state">
+          <div class="status-dot" style="width: 24px; height: 24px; animation: pulseAura 1s infinite alternate;"></div>
+          <h3 style="color: var(--aura-cyan);">Aura Code Engine Processing...</h3>
+          <p style="font-size: 0.85rem;">Gemini 2.5 Flash सबले तेज स्पीड में हाई-लेवल कोड आर्किटेक्चर जनरेट करत बा...</p>
+        </div>
+      `;
+
+      // System Prompt tailored for Senior Staff Software Architecture
+      const systemInstruction = `You are Aura Code, an elite Principal Staff Software Architect.
+Your task is to generate complete, high-level, production-ready code based on the user's requirements.
+Guidelines:
+1. Deliver fully functional, clean, idiomatic code without placeholders or "left as exercise" shortcuts.
+2. Adhere to Clean Architecture, SOLID principles, optimal error handling, and robust type safety.
+3. Target stack: ${selectedStack}.
+4. Provide structured architectural overview, file tree if multi-file, followed by clean markdown code blocks with correct language identifiers.`;
+
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [
+              {
+                role: 'user',
+                parts: [{ text: prompt }]
+              }
+            ],
+            systemInstruction: {
+              parts: [{ text: systemInstruction }]
+            },
+            generationConfig: {
+              temperature: 0.2,
+              maxOutputTokens: 8192
+            }
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+          throw new Error(data.error.message || 'API Error occurred');
+        }
+
+        const generatedText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+        if (!generatedText) {
+          throw new Error('No content returned from the model.');
+        }
+
+        rawGeneratedMarkdown = generatedText;
+        
+        // Render Markdown & Code
+        viewport.innerHTML = marked.parse(generatedText);
+        
+        // Highlight all code blocks
+        viewport.querySelectorAll('pre code').forEach((block) => {
+          hljs.highlightElement(block);
+        });
+
+      } catch (err) {
+        viewport.innerHTML = `
+          <div style="padding: 2rem; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; color: #fca5a5;">
+            <h4 style="font-weight: 700; margin-bottom: 0.5rem;">Generation Error</h4>
+            <p style="font-size: 0.9rem;">${err.message}</p>
+            <p style="margin-top: 1rem; font-size: 0.8rem; color: #fff;">कृपया आपन API Key चेक करीं भा इंटरनेट कनेक्शन जाँचीं।</p>
+          </div>
+        `;
+      } finally {
+        generateBtn.disabled = false;
+        generateBtn.innerHTML = `<span>Generate Software Code</span><span>✦</span>`;
+      }
+    }
+
+    // Copy Generated Code Only
+    function copyCurrentCode() {
+      const codeElements = document.querySelectorAll('#viewportContent pre code');
+      if (codeElements.length === 0) {
+        if (rawGeneratedMarkdown) {
+          navigator.clipboard.writeText(rawGeneratedMarkdown);
+          alert('पूरा आउटपुट कॉपी हो गइल!');
+        } else {
+          alert('कॉपी करे खातिर कवनो कोड नइखे!');
+        }
+        return;
+      }
+
+      let allCode = '';
+      codeElements.forEach((el, index) => {
+        allCode += `// --- Block ${index + 1} ---\n` + el.innerText + '\n\n';
+      });
+
+      navigator.clipboard.writeText(allCode);
+      alert('सभ कोड ब्लॉक्स क्लिपबोर्ड में कॉपी हो गइल!');
+    }
+
+    // Download Source Code
+    function downloadCode() {
+      if (!rawGeneratedMarkdown) {
+        alert('डाउनलोड करे खातिर पहिले कोड जनरेट करीं!');
+        return;
+      }
+
+      const blob = new Blob([rawGeneratedMarkdown], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `aura-code-${Date.now()}.md`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
