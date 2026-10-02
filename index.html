@@ -552,8 +552,8 @@
         <div class="model-selector-wrapper">
           <div class="status-dot"></div>
           <select id="modelSelector" class="model-select" onchange="handleModelChange(this.value)">
-            <option value="gemini-3.5-lite" selected>gemini-3.5-lite (Ultra Fast)</option>
-            <option value="gemini-3.5-flash">gemini-3.5-flash (Fast & Accurate)</option>
+            <option value="gemini-3.5-lite" >gemini-3.5-lite (Ultra Fast)</option>
+            <option value="gemini-3.5-flash"selected>gemini-3.5-flash (Fast & Accurate)</option>
             <option value="gemini-3.1-pro">gemini-3.1-pro (Deep Architecture)</option>
             <option value="gemini-3-pro">gemini-3-pro (High Reasoning)</option>
             <option value="custom">⚙ Custom Model ID...</option>
@@ -717,7 +717,7 @@
     // Core Generation API Call
     async function generateHighLevelCode() {
       const prompt = document.getElementById('promptInput').value.trim();
-      const apiKey = localStorage.getItem('aura_gemini_api_key');
+      const apiKey = localStorage.getItem('AQ.Ab8RN6LIE4Qt_HrLKJub4v40TzjG-ppqtrtupYk-waucgW8JfA');
 
       if (!apiKey) {
         openKeyModal();
